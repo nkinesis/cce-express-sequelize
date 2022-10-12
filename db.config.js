@@ -1,9 +1,9 @@
 module.exports = {
-  HOST: "awpweather.mysql.database.azure.com",
+  HOST: "localhost",
   PORT: 3306,
-  USER: "awpweather",
-  PASSWORD: "webp#2022",
-  DB: "awpweather",
+  USER: "root",
+  PASSWORD: "mypassword",
+  DB: "mydb",
   dialect: "mysql",
   pool: {
     max: 5,
