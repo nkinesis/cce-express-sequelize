@@ -2,5 +2,5 @@
 Express + Sequelize app for AWP MOD8, Concordia Continuing Education
 
 # Setup
-npm install
-npm run start
+- npm install
+- npm run start
