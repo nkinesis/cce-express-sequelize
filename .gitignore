@@ -1,0 +1,11 @@
+node_modules
+build
+logs
+
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
