@@ -17,8 +17,6 @@ const User = require("../models/user.model")(connection, Sequelize);
 
 // Create and Save a new User
 exports.create = (req, res) => {
-    // test receiving body
-    console.log("test:", req.body.fullname)
 
     // Validate request
     if (!req.body.fullname || !req.body.email || !req.body.phone) {
@@ -34,21 +32,19 @@ exports.create = (req, res) => {
         email: req.body.email,
         phone: req.body.phone
     };
-    console.log("here0")
+
     // Save User in the database
     User.create(user)
         .then(data => {
             res.send(data);
-            console.log("here1")
         })
         .catch(err => {
-            console.log("here2")
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while creating the User."
             });
         });
-    console.log("here3")
+
 };
 
 // Retrieve all Users from the database.

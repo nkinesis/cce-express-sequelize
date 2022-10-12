@@ -50,9 +50,12 @@ const connection = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, 
 /* END db initialization */
 
 const User = require("./models/user.model")(connection, Sequelize);
+User.sync({ force: false, alter: true });
+
 const UserType = require("./models/userType.model")(connection, Sequelize);
 UserType.hasOne(User);
 UserType.sync({ force: false, alter: true });
-User.sync({ force: false, alter: true });
+
+
 
 module.exports = app;
