@@ -1,5 +1,5 @@
 # CCE Sequelize Examples
-Simple Sequelize examples that work both inside and outside an Express project. Created for AWP MOD8, Concordia Continuing Education
+Simple Sequelize examples that work both inside and outside an Express project. Created for AWP MOD8, Concordia Continuing Education.
 
 # Setup
 - npm install
