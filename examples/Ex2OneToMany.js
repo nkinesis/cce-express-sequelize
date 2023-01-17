@@ -59,8 +59,14 @@ sequelize.sync({ alter: true }).then(() => {
     country = data
     return city.setCountry(country)
 }).then((data) => {
-    return City.findOne({ include: Country, where: { name: 'Montreal' } })
+    // select a city
+    // for Sequelize to understand the association, you must use "include"
+    return City.findOne({
+        where: { name: 'Montreal' },
+        include: Country
+    })
 }).then((data) => {
+    // get the country the city belongs to
     city = data
     return city.getCountry()
 }).then((data) => {

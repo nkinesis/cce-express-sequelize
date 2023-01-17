@@ -28,6 +28,7 @@ const Capital = sequelize.define('capital', {
 
 // create association: 1 country to 1 capital
 Country.hasOne(Capital)
+Capital.belongsTo(Country)
 
 let country, capital
 sequelize.sync({ alter: true }).then(() => {
@@ -50,12 +51,19 @@ sequelize.sync({ alter: true }).then(() => {
     return country.setCapital(capital)
 }).then((data) => {
     // create a new country and a new capital for it
-    Country.create({ name: 'England', capital: { name: 'London ' } }, {
-        include: [{
-            model: Capital,
-            as: 'capital'
-        }]
-    })
+    // for Sequelize to understand the association, you must use "include"
+    Country.create(
+        {
+            name: 'England',
+            capital: { name: 'London ' }
+        },
+        {
+            include: [{
+                model: Capital,
+                as: 'capital'
+            }]
+        })
+    // look at the database table Capital, if this code works there should be a a new capital there, London
 }).catch((err) => {
     console.log(err)
 })

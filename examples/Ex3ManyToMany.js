@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const { DataTypes, Op } = Sequelize
+const { DataTypes } = Sequelize
 
 // create connection
 const sequelize = new Sequelize('example_db', 'example_user', 'password', {
@@ -45,17 +45,23 @@ sequelize.sync({ alter: true }).then((data) => {
     return Apartment.create({ address: '4321 Rue Test', number: 201 })
 }).then((data) => {
     apartment = data
-    user.addApartment(apartment)
+    return user.addApartment(apartment)
 }).then((data) => {
+    // select user by email
+    // for Sequelize to understand the association, you must use "include"
     return User.findOne({
-        where: { email: 'bob@example.com' }, include: [{
+        where: { email: 'bob@example.com' }, 
+        include: [{
             model: Apartment,
             as: 'apartments'
         }]
     })
 }).then((data) => {
     user = data
-    // this way you can see all apartments linked to a user
-    console.log(user.apartments)
+    // get all apartments related to the user
+    console.log("Apartments of user " + user.name)
+    for (let apt of user.apartments) {
+        console.log("Apartment " + apt.number + " at " + apt.address)
+    }
 })
 
