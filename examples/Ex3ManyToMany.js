@@ -24,12 +24,10 @@ const User = sequelize.define('user', {
 
 const Apartment = sequelize.define('apartment', {
     number: {
-        type: DataTypes.INTEGET,
-        unique: true
+        type: DataTypes.INTEGER,
     },
     address: {
         type: DataTypes.STRING,
-        unique: true
     }
 }, {
     timestamps: false
@@ -49,7 +47,12 @@ sequelize.sync({ alter: true }).then((data) => {
     apartment = data
     user.addApartment(apartment)
 }).then((data) => {
-    return User.findOne({ include: Apartment, where: { email: 'bob@example.com' } })
+    return User.findOne({
+        where: { email: 'bob@example.com' }, include: [{
+            model: Apartment,
+            as: 'apartments'
+        }]
+    })
 }).then((data) => {
     user = data
     // this way you can see all apartments linked to a user
