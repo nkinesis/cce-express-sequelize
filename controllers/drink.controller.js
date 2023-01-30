@@ -51,10 +51,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Drinks from the database.
 exports.findAll = (req, res) => {
-    const type = req.query.type;
-    var condition = type ? { type: { [Op.like]: `%${type}%` } } : null;
-
-    Drink.findAll({ where: condition })
+    Drink.findAll()
         .then(data => {
             res.send(data);
         })
