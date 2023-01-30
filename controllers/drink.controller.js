@@ -12,142 +12,152 @@ const connection = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, 
         idle: dbConfig.pool.idle
     }
 });
-const User = require("../models/user.model")(connection, Sequelize);
+const Drink = require("../models/drink.model")(connection, Sequelize);
 /* END db initialization */
 
-// Create and Save a new User
+// Create and Save a new Drink
 exports.create = (req, res) => {
 
     // Validate request
-    if (!req.body.fullname || !req.body.email || !req.body.phone) {
+    if (!req.body.name || !req.body.type) {
         res.status(400).send({
-            message: "User must have name, email and phone!"
+            message: "Drink must have a name and type!"
         });
         return;
     }
 
-    // Create a User
-    const user = {
-        fullname: req.body.fullname,
-        email: req.body.email,
-        phone: req.body.phone
+    // Create a Drink
+    const drink = {
+        name: req.body.name,
+        image: req.body.image ? req.body.image : "coffee1.png",
+        rating: req.body.rating ? req.body.rating : 1,
+        count: req.body.count ? req.body.count : "1k",
+        type: req.body.type,
     };
 
-    // Save User in the database
-    User.create(user)
+    // Save Drink in the database
+    Drink.create(drink)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while creating the Drink."
             });
         });
 
 };
 
-// Retrieve all Users from the database.
+// Retrieve all Drinks from the database.
 exports.findAll = (req, res) => {
-    const fullname = req.query.fullname;
-    var condition = fullname ? { fullname: { [Op.like]: `%${fullname}%` } } : null;
+    const type = req.query.type;
+    var condition = type ? { type: { [Op.like]: `%${type}%` } } : null;
 
-    User.findAll({ where: condition })
+    Drink.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving users."
+                    err.message || "Some error occurred while retrieving drinks."
             });
         });
 };
 
-// Find a single User with an id
+// Retrieve all Drinks from the database with a certain type.
+exports.findAllByType = (req, res) => {
+    const type = req.params.type;
+    console.log(type);
+    res.status(500).send({ message: "Not implemented yet!" });
+
+};
+
+// Find a single Drink with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    Drink.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find User with id=${id}.`
+                    message: `Cannot find Drink with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving User with id=" + id
+                message: "Error retrieving Drink with id=" + id
             });
         });
 };
 
-// Update a User by the id in the request
+// Update a Drink by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    User.update(req.body, {
+    Drink.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was updated successfully."
+                    message: "Drink was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+                    message: `Cannot update Drink with id=${id}. Maybe Drink was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating User with id=" + id
+                message: "Error updating Drink with id=" + id
             });
         });
 };
 
-// Delete a User with the specified id in the request
+// Delete a Drink with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    User.destroy({
+    Drink.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was deleted successfully!"
+                    message: "Drink was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                    message: `Cannot delete Drink with id=${id}. Maybe Drink was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete User with id=" + id
+                message: "Could not delete Drink with id=" + id
             });
         });
 };
 
-// Delete all Users from the database.
+// Delete all Drinks from the database.
 exports.deleteAll = (req, res) => {
-    User.destroy({
+    Drink.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Users were deleted successfully!` });
+            res.send({ message: `${nums} Drinks were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all users."
+                    err.message || "Some error occurred while removing all drinks."
             });
         });
 };
