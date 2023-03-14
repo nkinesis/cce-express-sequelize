@@ -3,6 +3,7 @@ Express + Sequelize app for AWP MOD8, Concordia Continuing Education. For simple
 
 # Setup for Express project
 - npm install
+- add you database name, username and password to db.config.js
 - npm run start
 
 # Setup for examples
